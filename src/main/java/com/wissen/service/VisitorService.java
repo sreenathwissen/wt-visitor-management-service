@@ -1,9 +1,6 @@
 package com.wissen.service;
 
-import com.wissen.dto.VisitorDto;
 import com.wissen.entity.Visitor;
-
-import java.io.UnsupportedEncodingException;
 
 /**
  * Service for visitor details related operation.
