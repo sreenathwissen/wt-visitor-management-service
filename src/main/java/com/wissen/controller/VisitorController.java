@@ -1,7 +1,6 @@
 package com.wissen.controller;
 
 import com.wissen.constants.Constants;
-import com.wissen.dto.VisitorFilterDto;
 import com.wissen.dto.FilterRequest;
 import com.wissen.entity.Visitor;
 import com.wissen.model.response.VisitorManagementResponse;
@@ -44,7 +43,7 @@ public class VisitorController {
             return ResponseUtil.getResponse(savedData);
         }catch (Exception e) {
             log.error(Constants.EXCEPTION_LOG_PREFIX, e.getMessage());
-            return ResponseUtil.getResponse("Not able to save visitor details", "Visitor Details", e);
+            return ResponseUtil.getResponse(e.getMessage(), "Visitor Details", e);
         }
     }
 
@@ -66,26 +65,6 @@ public class VisitorController {
             return ResponseUtil.getResponse("Not able to update log out time.", "Logout time", e);
         }
     }
-
-    /**
-     * API method to get visitors details.
-     *
-     * @param visitorFilterDto
-     * @return response
-     */
-    @PostMapping("/get")
-    @ApiOperation(value = "API to get visitors details", nickname = "getVisitorsDetails")
-    public VisitorManagementResponse getVisitorsDetails(@RequestBody VisitorFilterDto visitorFilterDto) {
-        try {
-            log.info("Getting visitors details");
-            List<Visitor> visitors = this.visitorService.getVisitorsDetails(visitorFilterDto);
-            return ResponseUtil.getResponse(visitors);
-        }catch (Exception e) {
-            log.error(Constants.EXCEPTION_LOG_PREFIX, e.getMessage());
-            return ResponseUtil.getResponse(e.getMessage(), "Visitors details", e);
-        }
-    }
-
 
     /**
      * Method to fetch values from the Visitor table

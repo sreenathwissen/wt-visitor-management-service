@@ -41,27 +41,24 @@ public class Visitor {
     @Column(nullable = false, length = 100)
     private String pointOfContact;
 
-    //TODO make it nullable
-    @NotBlank(message = "Point of contact email can not be blank.")
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String pointOfContactEmail;
 
     @NotBlank(message = "Location can not be blank.")
     @Column(nullable = false, length = 255)
     private String location;
 
-    //TODO make it mandatory
-    @Column(nullable = true, length = 100)
+    @NotBlank(message = "Purpose of visit can not be blank.")
+    @Column(nullable = false, length = 100)
     private String purposeOfVisit;
 
-    //TODO mke it allow null
     @Column(nullable = true, length = 50)
     private String visitorType;
 
-    @Column(nullable = true, length = 50)
+    @NotBlank(message = "Id proof type can not be blank.")
+    @Column(nullable = false, length = 50)
     private String idProofType;
 
-    //TODO make it mandatory
     @NotBlank(message = "Id proof number can not be blank.")
     @Column(nullable = false, length = 100)
     private String idProofNumber;
@@ -84,7 +81,6 @@ public class Visitor {
     @Column(nullable = true, length = 700000)
     private byte[] idProofImage;
 
-    //TODO make it mandatory so that UI sends always
     @Transient
     private String visitorImageBase64;
 

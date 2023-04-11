@@ -1,6 +1,5 @@
 package com.wissen.service;
 
-import com.wissen.dto.VisitorFilterDto;
 import com.wissen.dto.FilterRequest;
 import com.wissen.entity.Visitor;
 
@@ -28,14 +27,6 @@ public interface VisitorService {
      * @return visitor
      */
     public Visitor logOut(String id);
-
-    /**
-     * Method to get visitors details..
-     *
-     * @param visitorFilterDto
-     * @return visitors
-     */
-    public List<Visitor> getVisitorsDetails(VisitorFilterDto visitorFilterDto);
 
     /**
      * Method to fetch values from the Visitor table

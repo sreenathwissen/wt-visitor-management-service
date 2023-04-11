@@ -1,12 +1,9 @@
 package com.wissen.service.impl;
 
-import com.wissen.constants.Constants;
 import com.wissen.dto.FilterRequest;
-import com.wissen.dto.VisitorFilterDto;
 import com.wissen.enrich.FilterSpecification;
 import com.wissen.entity.Visitor;
 import com.wissen.exceptions.VisitorManagementException;
-import com.wissen.repository.VisitorEntityManagerRepository;
 import com.wissen.repository.VisitorRepository;
 import com.wissen.service.VisitorService;
 import com.wissen.util.VisitorManagementUtils;
@@ -35,9 +32,6 @@ public class VisitorServiceImpl implements VisitorService {
 
     @Autowired
     private VisitorRepository visitorRepository;
-
-    @Autowired
-    private VisitorEntityManagerRepository visitorEntityManagerRepository;
 
     /**
      * Filter Specification is used to enrich the input request
@@ -92,35 +86,6 @@ public class VisitorServiceImpl implements VisitorService {
         Visitor visitor = this.visitorRepository.findById(id).get();
         visitor.setOutTime(LocalDateTime.now());
         return visitorRepository.save(visitor);
-    }
-
-    /**
-     * Method to get visitors details.
-     *
-     * @param visitorFilterDto
-     * @return visitors
-     */
-    @Override
-    public List<Visitor> getVisitorsDetails(VisitorFilterDto visitorFilterDto) {
-        if(Objects.isNull(visitorFilterDto.getFromInTime()) && Objects.nonNull(visitorFilterDto.getToInTime())) {
-            throw new VisitorManagementException(Constants.FILTER_ERROR);
-        } else if (Objects.nonNull(visitorFilterDto.getFromInTime()) && Objects.isNull(visitorFilterDto.getToInTime())) {
-            throw new VisitorManagementException(Constants.FILTER_ERROR);
-        }  else {
-            List<Visitor> visitors =  this.visitorEntityManagerRepository.findVisitorDetailsByFilter(visitorFilterDto);
-
-            // Decorating images for UI.
-            visitors.forEach( visitor -> {
-                visitor.setIdProofImageBase64(Objects.nonNull(visitor.getIdProofImage()) ?
-                        VisitorManagementUtils.convertByteToBase64(visitor.getIdProofImage()) : null);
-                visitor.setVisitorImageBase64(VisitorManagementUtils.convertByteToBase64(visitor.getVisitorImage()));
-
-                visitor.setVisitorImage(null);
-                visitor.setIdProofImage(null);
-            });
-
-            return visitors;
-        }
     }
 
     /**
