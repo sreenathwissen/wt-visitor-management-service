@@ -1,5 +1,7 @@
 package com.wissen.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wissen.constants.Constants;
@@ -94,9 +97,16 @@ public class VisitorController {
 
 	@GetMapping("/generateReport")
 	@ApiOperation(value = "API to generate visitor details report", nickname = "getVisitorsReport")
-	public VisitorManagementResponse getVisitorsReport() {
+	public VisitorManagementResponse getVisitorsReport(
+			@RequestParam(defaultValue = "dd-MM-yyyy HH:mm:ss") String startDateTime,
+			@RequestParam(defaultValue = "dd-MM-yyyy HH:mm:ss") String endDateTime) {
 		try {
-			return ResponseUtil.getResponse(visitorReport.generateVisitorReport());
+
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+			LocalDateTime startTime = LocalDateTime.parse(startDateTime, formatter);
+			LocalDateTime endTime = LocalDateTime.parse(endDateTime, formatter);
+
+			return ResponseUtil.getResponse(visitorReport.generateVisitorReport(startTime, endTime));
 		} catch (Exception e) {
 			log.error(Constants.EXCEPTION_LOG_PREFIX, e.getMessage());
 			return ResponseUtil.getResponse(e.getMessage(), "Visitors Report", e);
