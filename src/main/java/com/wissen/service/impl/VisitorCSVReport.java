@@ -38,20 +38,29 @@ public class VisitorCSVReport implements VisitorReport {
 	@Value("${visitor.report.filename}")
 	private String visitorReportFilename;
 
+	@Value("${visitor.report.file.ext}")
+	private String visitorReportFileExt;
+
+	@Value("${visitor.report.file.time.format}")
+	private String visitorReportFileTimeFormat;
+
 	@Value("${visitor.report.header}")
 	private String visitorReportHeader;
 
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	private DateTimeFormatter visitorFileFormatter;
 
 	/**
 	 * It fetches all the records from visitor table and generate the report with
 	 * visitors and timing details
 	 */
 	@Override
-	public File generateVisitorReport() {
+	public File generateVisitorReport(LocalDateTime startDateTime, LocalDateTime endDateTime) {
 		log.info("Generating visitors report");
-		List<Visitor> visitorList = visitorRepository.findAll();
-		String fileName = visitorReportFilename + "_" + LocalDateTime.now();
+		visitorFileFormatter = DateTimeFormatter.ofPattern(visitorReportFileTimeFormat);
+		String dateFormat = LocalDateTime.now().format(visitorFileFormatter);
+		List<Visitor> visitorList = visitorRepository.findByTimingsInTimeBetween(startDateTime, endDateTime);
+		String fileName = visitorReportFilename + "_" + dateFormat + visitorReportFileExt;
 		try (FileWriter writer = new FileWriter(fileName)) {
 			// Write the headers to the CSV file
 			writer.append(visitorReportHeader);

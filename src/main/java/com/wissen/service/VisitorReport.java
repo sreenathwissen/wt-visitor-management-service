@@ -1,6 +1,7 @@
 package com.wissen.service;
 
 import java.io.File;
+import java.time.LocalDateTime;
 
 /**
  * Service class for report generation related operation for visitor.
@@ -9,5 +10,5 @@ import java.io.File;
  */
 public interface VisitorReport {
 
-	public File generateVisitorReport();
+	public File generateVisitorReport(LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

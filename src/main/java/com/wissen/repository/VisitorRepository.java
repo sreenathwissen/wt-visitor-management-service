@@ -1,5 +1,6 @@
 package com.wissen.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +43,21 @@ public interface VisitorRepository extends JpaRepository<Visitor, String>, JpaSp
 
 	/**
 	 * Find visitor based on visitor Id
+	 * 
 	 * @param id
 	 * @return Optional with visitor details
 	 */
 	Optional<Visitor> findByVisitorId(String id);
 
+	/**
+	 * 
+	 * Method to fetch all the visitors based on the dateTime range
+	 * 
+	 * @param startDateTime : Start DateTime
+	 * @param endDateTime   : End DateTime
+	 * @return : List of Visitors
+	 */
+	@Query("SELECT DISTINCT v FROM Visitor v JOIN FETCH v.timings t WHERE t.inTime BETWEEN :startDateTime AND :endDateTime")
+	List<Visitor> findByTimingsInTimeBetween(@Param("startDateTime") LocalDateTime startDateTime,
+			@Param("endDateTime") LocalDateTime endDateTime);
 }
